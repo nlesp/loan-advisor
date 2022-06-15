@@ -13,8 +13,8 @@ import flasgger
 from flasgger import Swagger
 
 app=Flask(__name__)
-Swagger(app)
-
+Swagger(app) 
+data_train = pd.read_csv('application_train.csv')
 pickle_in = open("pipeline_bank.pkl","rb")
 classifier=pickle.load(pickle_in)
 

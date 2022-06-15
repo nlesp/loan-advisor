@@ -6,7 +6,7 @@ import streamlit as st
 
 from PIL import Image
 
-
+data_train = pd.read_csv('application_train.csv')
 pickle_in = open("pipeline_bank.pkl","rb")
 classifier=pickle.load(pickle_in)
 
@@ -53,12 +53,12 @@ def predict_note(id):
 def main():
     st.title("Bank Helper")
 
-    data_train = pd.read_csv('application_train.csv')
+    
     id = st.selectbox('Choose Id client', data_train, help = 'Filter report to show only one id client')
     
     if st.button("Predict"):
         result=predict_note(id)
-    st.success('The output is {}'.format(result))
+        st.success('The output is {}'.format(result))
 
 if __name__=='__main__':
     main()
