@@ -19,7 +19,7 @@ pickle_in = open("pipeline_bank.pkl","rb")
 classifier=pickle.load(pickle_in)
 
 
-@app.route('/predict',methods=["Get"])
+@app.route('/predict_proba',methods=["Get"])
 def predict_note():
     
     """Let's finde the Banks Note 
@@ -36,6 +36,7 @@ def predict_note():
         
     """
     id = request.args.get("id")
+
     col_index = len(data_train.columns)
     row_index =np.where(data_train['SK_ID_CURR'] == id)
     column_value_id = data_train.iloc[row_index[0][0], 1:col_index]

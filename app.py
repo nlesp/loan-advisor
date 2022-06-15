@@ -1,3 +1,4 @@
+from unittest import result
 import numpy as np
 import pickle
 import pandas as pd
@@ -10,7 +11,7 @@ pickle_in = open("classifier.pkl","rb")
 classifier=pickle.load(pickle_in)
 
 #@app.route('/predict',methods=["Get"])
-def predict_bank(type_client,flag,region_rating,region_rating_city,amount):
+def predict_note(id):
     
     """Let's Authenticate the Banks Note 
     This is using docstrings for specifications.
@@ -41,31 +42,23 @@ def predict_bank(type_client,flag,region_rating,region_rating_city,amount):
             description: The output values
         
     """
-   
-    prediction=classifier.predict([[type_client,flag,region_rating,region_rating_city,amount]])
+    col_index = len(data_train.columns)
+    row_index =np.where(data_train['SK_ID_CURR'] == id)
+    column_value_id = data_train.iloc[row_index[0][0], 1:col_index]
+    df_column_value_id = column_value_id.to_frame().T
+    prediction=classifier.predict_proba(df_column_value_id)[:,1]
     print(prediction)
     return prediction
 
 def main():
     st.title("Bank Helper")
-    html_temp = """
-    <div style="background-color:tomato;padding:10px">
-    <h2 style="color:white;text-align:center;">Streamlit Bank Helper ML App </h2>
-    </div>
-    """
-    st.markdown(html_temp,unsafe_allow_html=True)
-    type_client = st.text_input("Type of client","Type Here")
-    flag = st.text_input("flag own reality","Type Here")
-    region_rating = st.text_input("Region Rating","Type Here")
-    region_rating_city = st.text_input("Region Rating City","Type Here")
-    amount = st.text_input("Amount of credit","Type Here")
-    result=""
+
+    data_train = pd.read_csv('application_train.csv')
+    id = st.selectbox('Choose Id client', data_train, help = 'Filter report to show only one id client')
+    
     if st.button("Predict"):
-        result=predict_bank(type_client,flag,region_rating,region_rating_city,amount)
+        result=predict_note(id)
     st.success('The output is {}'.format(result))
-    if st.button("About"):
-        st.text("Lets LEarn")
-        st.text("Built with Streamlit")
 
 if __name__=='__main__':
     main()
