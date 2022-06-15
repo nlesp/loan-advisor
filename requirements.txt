@@ -8,4 +8,6 @@ pandas==1.4.2
 pickleshare==0.7.5
 scikit-learn==1.1.1
 streamlit==1.10.0
-
+lightgbm==3.3.2
+scikit-learn==1.1.1
+matplotlib==3.5.2 
