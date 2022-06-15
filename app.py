@@ -7,7 +7,7 @@ import streamlit as st
 from PIL import Image
 
 
-pickle_in = open("classifier.pkl","rb")
+pickle_in = open("pipeline_bank.pkl","rb")
 classifier=pickle.load(pickle_in)
 
 #@app.route('/predict',methods=["Get"])
