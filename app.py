@@ -28,7 +28,6 @@ def main():
     pred = requests.post(url_id, headers=headers, json=payload)
 
     if st.button("Predict"):
-        result=predict_note(id)
         st.success('The score of the client is {}'.format(pred))
         #st.success("The score is "+str(round(prediction, 4))+" for the client "+str(id))
         names='0', '1',
