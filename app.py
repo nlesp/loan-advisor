@@ -34,7 +34,8 @@ def main():
         names='0', '1',
         id_score = [1-result,result]
         fig = plt.pie(id_score,labels=names,labeldistance=1.15)
-        fig.update_layout(title_text="Client score",title_x=0, yaxis_title=None, xaxis_title=None)
+        fig.show()
+        #fig.update_layout(title_text="Client score",title_x=0, yaxis_title=None, xaxis_title=None)
 
 if __name__=='__main__':
     main()
