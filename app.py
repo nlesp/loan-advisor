@@ -23,21 +23,17 @@ def main():
     
     #id_list = requests.post(url_list, headers=headers, json=payload)
     #payload = st.selectbox('Choose Id client', id_list, help = 'Filter report to show only one id client')
-    payload = st.selectbox('Choose Id client', data_train['SK_ID_CURR'].tolist(), help = 'Filter report to show only one id client')
-    
+    id_client = st.selectbox('Choose Id client', data_train['SK_ID_CURR'].tolist(), help = 'Filter report to show only one id client')
+    payload = {"id": id_client}
     pred = requests.post(url_id, headers=headers, json=payload)
-
-    
-    #result = float(pred.content)
+    result = float(pred.content)
     if st.button("Predict"):
-        st.success('The score of the client is {}'.format(pred.content))
-        #st.success('The score of the client is {}'.format(float.fromhex(pred.content)))         
-        #st.success('The score of the client is {}'.format(result))
+        st.success('The score of the client is {}'.format(result))
         #st.success("The score is "+str(round(prediction, 4))+" for the client "+str(id))
-     #   names='0', '1',
-      #  id_score = [1-result,result]
-     #   fig = plt.pie(id_score,labels=names,labeldistance=1.15)
-      #  fig.update_layout(title_text="Client score",title_x=0, yaxis_title=None, xaxis_title=None)
+        names='0', '1',
+        id_score = [1-result,result]
+        fig = plt.pie(id_score,labels=names,labeldistance=1.15)
+        fig.update_layout(title_text="Client score",title_x=0, yaxis_title=None, xaxis_title=None)
 
 if __name__=='__main__':
     main()
