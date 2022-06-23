@@ -26,12 +26,12 @@ def main():
     payload = st.selectbox('Choose Id client', data_train['SK_ID_CURR'].tolist(), help = 'Filter report to show only one id client')
     
     pred = requests.post(url_id, headers=headers, json=payload)
-
+    result = float(pred.content)
     if st.button("Predict"):
-        st.success('The score of the client is {}'.format(pred))
+        st.success('The score of the client is {}'.format(result))
         #st.success("The score is "+str(round(prediction, 4))+" for the client "+str(id))
         names='0', '1',
-        id_score = [1-pred,pred]
+        id_score = [1-result,result]
         fig = plt.pie(id_score,labels=names,labeldistance=1.15)
         fig.update_layout(title_text="Client score",title_x=0, yaxis_title=None, xaxis_title=None)
 
