@@ -26,11 +26,13 @@ def main():
     payload = st.selectbox('Choose Id client', data_train['SK_ID_CURR'].tolist(), help = 'Filter report to show only one id client')
     
     pred = requests.post(url_id, headers=headers, json=payload)
-    #pred = requests.post(url_id, headers=headers, json=payload)
+    pred1 = requests.post(url_id, headers=headers, data=payload)
+    pred2 = requests.post(url_id, headers=headers, data=json.dumps(payload))
     
     #result = float(pred.content)
     if st.button("Predict"):
-        #st.success('The score of the client is {}'.format(type(pred.content)))
+        st.success('The score of the client is {}'.format(pred1.content))
+        st.success('The score of the client is {}'.format(pred2.content))
         st.success('The score of the client is {}'.format(pred.content))
         #st.success('The score of the client is {}'.format(float.fromhex(pred.content)))         
         #st.success('The score of the client is {}'.format(result))
