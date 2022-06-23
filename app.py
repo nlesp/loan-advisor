@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 
 # 2. Create the app object /  Initialize an instance of FastAPI
 
+
 data_train = pd.read_csv('application_train.csv')
 headers = {'Content-Type': 'application/json'}
 #url_id = "http://127.0.0.1:8000/predict"
@@ -33,9 +34,10 @@ def main():
         #st.success("The score is "+str(round(prediction, 4))+" for the client "+str(id))
         names='0', '1',
         id_score = [1-result,result]
-        fig = plt.pie(id_score,labels=names,labeldistance=1.15)
-        fig.show()
-        #fig.update_layout(title_text="Client score",title_x=0, yaxis_title=None, xaxis_title=None)
 
+        fig, ax = plt.subplots()
+        ax.pie(id_score,labels=names,labeldistance=1.15)
+        plt.show()
+        
 if __name__=='__main__':
     main()
