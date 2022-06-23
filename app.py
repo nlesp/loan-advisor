@@ -31,7 +31,7 @@ def main():
     
     #result = float(pred.content)
     if st.button("Predict"):
-        st.success('The score of the client is {}'.format(pred1.content))
+        #st.success('The score of the client is {}'.format(pred1.content))
         st.success('The score of the client is {}'.format(pred2.content))
         st.success('The score of the client is {}'.format(pred.content))
         #st.success('The score of the client is {}'.format(float.fromhex(pred.content)))         
