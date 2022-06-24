@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 
 # 2. Create the app object /  Initialize an instance of FastAPI
-chart = functools.partial(st.plotly_chart, use_container_width=True)
 
 data_train = pd.read_csv('application_train.csv')
 headers = {'Content-Type': 'application/json'}
