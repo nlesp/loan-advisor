@@ -38,7 +38,8 @@ def main():
 
         #fig, ax = plt.subplots()
         fig = px.pie(id_score,labels=names,labeldistance=1.15)
-        chart(fig)
+        fig.show()
+        st.plotly_chart(fig, use_container_width=False, sharing="streamlit")
         #plt.show()
         
 if __name__=='__main__':
