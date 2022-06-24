@@ -36,7 +36,7 @@ def main():
         id_score = [1-result,result]
 
         #fig, ax = plt.subplots()
-        fig = px.pie(id_score,labels=names,labeldistance=1.15)
+        fig = px.pie(id_score,labels=names)
         fig.show()
         st.plotly_chart(fig, use_container_width=False, sharing="streamlit")
         #plt.show()
