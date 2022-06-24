@@ -31,14 +31,14 @@ def main():
     pred = requests.post(url_id, headers=headers, json=payload)
     result = float(pred.content)
     if st.button("Predict"):
-        st.success('The score of the client is {}'.format(result))
+        st.success('Your solvency is at {:.0%}'.format(round(result, 4)))
         #st.success("The score is "+str(round(prediction, 4))+" for the client "+str(id))
         id_score = [1-result,result]
         names=['0', '1']
         #fig, ax = plt.subplots()
         fig = px.pie(values = id_score,names=names)
         fig.show()
-        st.plotly_chart(fig, use_container_width=False, sharing="streamlit")
+        #st.plotly_chart(fig, use_container_width=False, sharing="streamlit")
         #plt.show()
         
 if __name__=='__main__':
