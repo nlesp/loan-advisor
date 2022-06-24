@@ -10,9 +10,10 @@ import json
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
+import plotly.express as px
 
 # 2. Create the app object /  Initialize an instance of FastAPI
-
+chart = functools.partial(st.plotly_chart, use_container_width=True)
 
 data_train = pd.read_csv('application_train.csv')
 headers = {'Content-Type': 'application/json'}
@@ -35,9 +36,10 @@ def main():
         names='0', '1',
         id_score = [1-result,result]
 
-        fig, ax = plt.subplots()
-        ax.pie(id_score,labels=names,labeldistance=1.15)
-        plt.show()
+        #fig, ax = plt.subplots()
+        fig = px.pie(id_score,labels=names,labeldistance=1.15)
+        chart(fig)
+        #plt.show()
         
 if __name__=='__main__':
     main()
