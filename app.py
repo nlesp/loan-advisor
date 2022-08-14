@@ -21,12 +21,18 @@ headers = {'Content-Type': 'application/json'}
 #url_list = "http://127.0.0.1:8000/list"
 url_id = "https://loan-advisor-api.herokuapp.com/predict"
 url_list = "https://loan-advisor-api.herokuapp.com/list"
+
+"""API - load list of clients""" 
+#id_list_response = requests.get(url_list, headers=headers)
+#id_list = json.loads(id_list_response.content)  #parse bytes data with json module
+id_list = requests.get(url_list, headers=headers, json=payload)
 def main():
     st.title("Bank Helper")
     
-    #id_list = requests.post(url_list, headers=headers, json=payload)
+
     #payload = st.selectbox('Choose Id client', id_list, help = 'Filter report to show only one id client')
-    id_client = st.selectbox('Choose Id client', data_train['SK_ID_CURR'].tolist(), help = 'Filter report to show only one id client')
+    #id_client = st.selectbox('Choose Id client', data_train['SK_ID_CURR'].tolist(), help = 'Filter report to show only one id client')
+    id_client = st.selectbox('Choose Id client', id_list, help = 'Filter report to show only one id client')
     payload = {"id": id_client}
     pred = requests.post(url_id, headers=headers, json=payload)
     result = float(pred.content)
@@ -38,7 +44,7 @@ def main():
         #fig, ax = plt.subplots()
         fig = px.pie(values = id_score,names=names)
         fig.show()
-        #st.plotly_chart(fig, use_container_width=False, sharing="streamlit")
+        st.plotly_chart(fig, use_container_width=False, sharing="streamlit")
         #plt.show()
         
 if __name__=='__main__':
