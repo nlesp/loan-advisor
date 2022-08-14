@@ -40,7 +40,7 @@ def main():
         st.success('Your solvency is at {:.0%}'.format(round(result, 4)))
         #st.success("The score is "+str(round(prediction, 4))+" for the client "+str(id))
         id_score = [1-result,result]
-        names=['0', '1']
+        names=['Not Creditworthy', 'Creditworthy']
         #fig, ax = plt.subplots()
         fig = px.pie(values = id_score,names=names)
         fig.show()
