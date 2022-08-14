@@ -23,9 +23,9 @@ url_id = "https://loan-advisor-api.herokuapp.com/predict"
 url_list = "https://loan-advisor-api.herokuapp.com/list"
 
 """API - load list of clients""" 
-#id_list_response = requests.get(url_list, headers=headers)
-#id_list = json.loads(id_list_response.content)  #parse bytes data with json module
-id_list = requests.get(url_list, headers=headers, json=payload)
+id_list_response = requests.get(url_list, headers=headers)
+id_list = json.loads(id_list_response.content)  #parse bytes data with json module
+
 def main():
     st.title("Bank Helper")
     
