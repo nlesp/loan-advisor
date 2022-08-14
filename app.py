@@ -41,6 +41,7 @@ def main():
         #st.success("The score is "+str(round(prediction, 4))+" for the client "+str(id))
         id_score = [1-result,result]
         names=['Not Creditworthy', 'Creditworthy']
+        st.subheader("Creditworthy Rate")
         #fig, ax = plt.subplots()
         fig = px.pie(values = id_score,names=names)
         fig.show()
