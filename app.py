@@ -9,8 +9,16 @@ import requests
 import json
 import pandas as pd
 import streamlit as st
+from streamlit_shap import st_shap
 import matplotlib.pyplot as plt
 import plotly.express as px
+import plotly.graph_objects as go
+import shap
+import pickle
+
+#import model 
+pickle_in = open("pipeline_bank.pkl","rb")
+pipeline_process=pickle.load(pickle_in)
 
 # 2. Create the app object /  Initialize an instance of FastAPI
 #chart = functools.partial(st.plotly_chart, use_container_width=True)
@@ -21,6 +29,8 @@ headers = {'Content-Type': 'application/json'}
 #url_list = "http://127.0.0.1:8000/list"
 url_id = "https://loan-advisor-api.herokuapp.com/predict"
 url_list = "https://loan-advisor-api.herokuapp.com/list"
+url_client = 'https://loan-advisor-api.herokuapp.com/client'
+url_importance = 'https://loan-advisor-api.herokuapp.com/importance'
 
 """API - load list of clients""" 
 id_list_response = requests.get(url_list, headers=headers)
@@ -34,19 +44,37 @@ def main():
     #id_client = st.selectbox('Choose Id client', data_train['SK_ID_CURR'].tolist(), help = 'Filter report to show only one id client')
     id_client = st.selectbox('Choose Id client', id_list, help = 'Filter report to show only one id client')
     payload = {"id": id_client}
-    pred = requests.post(url_id, headers=headers, json=payload)
-    result = float(pred.content)
+    
+    
+    with st.expander("Client Information", expanded=False):
+        client_info_link = requests.get(url_client, headers=headers, json=id_client_json)
+        client_info = json.loads(client_info_link.content)
+        df_client_info = pd.DataFrame([client_info])
+        st.write(df_client_info)
+        
     if st.button("Predict"):
+        pred = requests.post(url_id, headers=headers, json=payload)
+        result = float(pred.content)
         st.success('Your solvency is at {:.0%}'.format(round(result, 4)))
-        #st.success("The score is "+str(round(prediction, 4))+" for the client "+str(id))
         id_score = [1-result,result]
         names=['Not Creditworthy', 'Creditworthy']
         st.subheader("Creditworthy Rate")
-        #fig, ax = plt.subplots()
         fig = px.pie(values = id_score,names=names)
-        fig.show()
         st.plotly_chart(fig, use_container_width=False, sharing="streamlit")
-        #plt.show()
+        
+    if st.button("Details"):
+        importance_info_link = requests.post(url_importance, headers=headers, json=id_client_json)
+        importance_info = json.loads(importance_info_link.content)
+        df_importance_info = pd.read_json(importance_info)
+        columnsEncoded = pipeline_process['preprocessor'].transformers_[0][1][1].get_feature_names_out()
+        columnsAll = columnsEncoded.tolist() + df_importance_info.columns.tolist()
+
+        observations_preprocessed = pipeline_process['preprocessor'].transform(df_importance_info)
+        explainer = shap.TreeExplainer(pipeline_process['classifier'])
+        shap_values = explainer.shap_values(observations_preprocessed)
+        st_shap(shap.summary_plot(shap_values[0][:], observations_preprocessed,feature_names=columnsAll, max_display=10))
+
+
         
 if __name__=='__main__':
     main()
