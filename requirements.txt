@@ -8,3 +8,4 @@ scikit-learn==1.0.2
 requests==2.27.1
 plotly
 shap==0.39.0
+streamlit-shap
