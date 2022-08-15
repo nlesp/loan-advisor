@@ -40,10 +40,9 @@ def main():
     st.title("Bank Helper")
     
 
-    #payload = st.selectbox('Choose Id client', id_list, help = 'Filter report to show only one id client')
-    #id_client = st.selectbox('Choose Id client', data_train['SK_ID_CURR'].tolist(), help = 'Filter report to show only one id client')
+    """Selectionne un client parmi la liste des clients"""
     id_client = st.selectbox('Choose Id client', id_list, help = 'Filter report to show only one id client')
-    payload = {"id": id_client}
+    id_client_json = {"id": id_client}
     
     
     with st.expander("Client Information", expanded=False):
@@ -53,7 +52,7 @@ def main():
         st.write(df_client_info)
         
     if st.button("Predict"):
-        pred = requests.post(url_id, headers=headers, json=payload)
+        pred = requests.post(url_id, headers=headers, json=id_client_json)
         result = float(pred.content)
         st.success('Your solvency is at {:.0%}'.format(round(result, 4)))
         id_score = [1-result,result]
