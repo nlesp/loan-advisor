@@ -31,8 +31,9 @@ url_id = "https://loan-advisor-api.herokuapp.com/predict"
 url_list = "https://loan-advisor-api.herokuapp.com/list"
 url_client = 'https://loan-advisor-api.herokuapp.com/client'
 url_importance = 'https://loan-advisor-api.herokuapp.com/importance'
+url_neighbors = 'https://loan-advisor-api.herokuapp.com/neighbors'
 
-"""API - load list of clients""" 
+#"""API - load list of clients""" 
 id_list_response = requests.get(url_list, headers=headers)
 id_list = json.loads(id_list_response.content)  #parse bytes data with json module
 
@@ -40,18 +41,12 @@ def main():
     st.title("Bank Helper")
     
 
-    """Selectionne un client parmi la liste des clients"""
+    """Select a client in the list"""
     id_client = st.selectbox('Choose Id client', id_list, help = 'Filter report to show only one id client')
     id_client_json = {"id": id_client}
     
-    
-    with st.expander("Client Information", expanded=False):
-        client_info_link = requests.get(url_client, headers=headers, json=id_client_json)
-        client_info = json.loads(client_info_link.content)
-        df_client_info = pd.DataFrame([client_info])
-        st.write(df_client_info)
-        
-    if st.button("Predict"):
+    #Show information about prediction
+    with st.expander("Solvency", expanded=False):
         pred = requests.post(url_id, headers=headers, json=id_client_json)
         result = float(pred.content)
         st.success('Your solvency is at {:.0%}'.format(round(result, 4)))
@@ -61,7 +56,26 @@ def main():
         fig = px.pie(values = id_score,names=names)
         st.plotly_chart(fig, use_container_width=False, sharing="streamlit")
         
-    if st.button("Details"):
+    #Show client information
+    with st.expander("Client Information", expanded=False):
+        client_info_link = requests.get(url_client, headers=headers, json=id_client_json)
+        client_info = json.loads(client_info_link.content)
+        df_client_info = pd.DataFrame([client_info])
+        st.write(df_client_info)
+        chck_neighbors = st.checkbox("Show similar cases ?")
+        
+    #Show information about close clients
+    if chck_neighbors:
+        client_neighbors_link = requests.post(url_neighbors, headers=headers, json=id_client_json)
+        client_neighbors = json.loads(client_neighbors_link.content)
+        df_client_neighbors = pd.read_json(client_neighbors)
+        st.markdown("<u>List of the 5 closest client :</u>", unsafe_allow_html=True)
+        st.write(df_client_neighbors)
+    else:
+        st.markdown("<i>Masqued informations</i>", unsafe_allow_html=True)
+        
+    #Show information local feature importance - Shap
+    with st.expander("More Information - Feature importance", expanded=False):
         importance_info_link = requests.post(url_importance, headers=headers, json=id_client_json)
         importance_info = json.loads(importance_info_link.content)
         df_importance_info = pd.read_json(importance_info)
