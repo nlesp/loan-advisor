@@ -5,7 +5,7 @@ pickleshare==0.7.5
 streamlit==1.11.1
 lightgbm==3.2.1
 scikit-learn==1.0.2
-requests==2.27.1
+requests==2.31.0
 plotly
 shap==0.39.0
 streamlit-shap
